@@ -18,10 +18,14 @@ def calc_budget(p,u,v,h,f,g,dx,dy):
     dv_dx = d_dx(v,dx)
     du_dy = d_dy(u,dy)
 
-    q = (dv_dx[1:-1,:] - du_dy[:,1:-1] + f[1:-1,1:-1])/(avg_x(avg_y(h)))
-    enstrophy = (avg_x(avg_y(h)))*q**2
+    q = np.zeros((p.shape[0]+1,p.shape[1]+1))
+    q[1:-1,1:-1] = (dv_dx[1:-1,:] - du_dy[:,1:-1] + f[1:-1,1:-1])/(avg_x(avg_y(h)))
     
-    return energy,enstrophy
+    enstrophy = (avg_x(avg_y(h)))*q[1:-1,1:-1]**2
+    
+    V = dx*dy*np.sum(p)
+
+    return energy,enstrophy,V
 
 
 
